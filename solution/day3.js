@@ -10,12 +10,15 @@ let preparsed = preParse(rawInput);
 
 const str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const findIndex = (i) => str.indexOf(i) + 1;
+const chunks = (a, size) =>
+    Array.from(
+        new Array(Math.ceil(a.length / size)),
+        (_, i) => a.slice(i * size, i * size + size)
+    );
+
 
 function parse(arr) {
-	arr = arr.map((e) => {
-		let half = e.length / 2;
-		return [e.slice(0, half), e.slice(half, str.length)];
-	});
+	arr = chunks(arr, arr.length / 2)
 
 	let score = [];
 
@@ -26,11 +29,11 @@ function parse(arr) {
 		score.push(diff[0]);
 	}
 
-	return sum(score.map(findIndex));
+	return score;
 }
 
 function sum(i) {
 	return i.reduce((prev, curr) => prev + curr, 0);
 }
 
-console.log(parse(preparsed));
+console.log(sum(parse(preparsed).map(findIndex)));
